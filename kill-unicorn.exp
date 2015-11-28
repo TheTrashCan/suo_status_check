@@ -1,0 +1,11 @@
+#!/usr/bin/expect -f
+set arg1 [lindex $argv 0]
+set timeout 30
+spawn ssh -p 8022 vagrant@$arg1
+expect "word:"
+send "vagrant\r"
+expect "$*"
+send "pkill -9 -f .*unicorn.*\r"
+expect "$*"
+send "exit\r"
+expect eof

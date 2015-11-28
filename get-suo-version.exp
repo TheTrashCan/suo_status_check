@@ -1,0 +1,50 @@
+#!/usr/bin/expect -f
+set arg1 [lindex $argv 0]
+set timeout 120
+spawn ssh -p 8022 vagrant@$arg1
+
+expect {
+  "yes/no" {
+    send "yes\r"
+    expect "word:"
+    send "vagrant\r"
+    expect "$*"
+    send "cat ~/suo/current/config/initializers/version.rb\r"
+    expect "$*"
+    send "echo `uptime -p`\r"
+    expect "$*"
+    send "exit\r"
+    expect eof
+    exit 0
+  }
+  "word:" {
+    send "vagrant\r"
+    expect "$*"
+    send "cat ~/suo/current/config/initializers/version.rb\r"
+    expect "$*"
+    send "echo `uptime -p`\r"
+    expect "$*"
+    send "exit\r"
+    expect eof
+    exit 0
+  }
+  "Connection refused" {
+    puts "my remote host"
+    exit 3
+  }
+  "remote host" {
+    puts "my remote host";
+    exit 3
+  }
+  "reset by peer" {
+    puts "my remote host";
+    exit 3
+  }
+  timeout {
+    puts "my remote host";
+    exit 1
+  }
+  eof {
+    exit 2
+  }
+}
