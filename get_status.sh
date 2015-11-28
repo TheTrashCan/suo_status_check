@@ -5,7 +5,6 @@ ADDR="`cat ./hostnames | grep $ip | awk -F ':' {'print $1'}`"
 
 if ping -c 3 $ip >/dev/null
 then
-#  version=$(expect get-suo-version.exp $ip | tee -a $LOG | grep APP_VERSION | cut -d = -f 2 | tr -d "\r" | tr -d \')
   text=`expect get-suo-version.exp $ip`
   version=$(echo $text | grep VERSION | cut -d = -f 2 | tr -d "\r" | cut -d \' -f 2)
   ssherror=$(echo $text | grep "my remote host")
